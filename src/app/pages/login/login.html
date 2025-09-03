@@ -1,0 +1,39 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2>Employee Dashboard</h2>
+
+    <form class="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          [(ngModel)]="loginObj.emailId"
+          id="email"
+          name="emailId"
+          required
+          placeholder="Enter your email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          [(ngModel)]="loginObj.password"
+          id="password"
+          name="password"
+          required
+          placeholder="Enter your password"
+        />
+      </div>
+
+      <button type="submit" class="login-button" (click)="onLogin()">
+        Sign In
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <a href="/forgot-password">Forgot password?</a>
+    </div>
+  </div>
+</div>

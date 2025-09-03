@@ -1,0 +1,240 @@
+<div class="p-6 bg-gray-50">
+  <!-- Page Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-semibold text-blue-800">Leave Management</h2>
+    <button
+      class="py-2! px-4! bg-blue-600 text-white rounded-lg! hover:bg-blue-700 transition-colors flex items-center"
+      (click)="openAddLeaveModal()"
+    >
+      <i class="fas fa-plus mr-2"></i> Add Leave
+    </button>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="flex mb-6! border-b-2 border-gray-300">
+    <button
+      class="py-2 px-4 font-medium bg-blue-600 rounded-tl-md! rounded-tr-md! text-white border-b-2 border-blue-600"
+    >
+      All Leaves
+    </button>
+
+    <button
+      class="py-2 px-4 font-medium text-gray-500 rounded-tl-md! rounded-tr-md! border-b-2 border-transparent hover:text-blue-600"
+    >
+      Pending Approval
+    </button>
+
+    <button
+      class="py-2 px-4 font-medium text-gray-500 rounded-tl-md! rounded-tr-md! border-b-2 border-transparent hover:text-blue-600"
+    >
+      Approved
+    </button>
+  </div>
+
+  <div>
+    <h6 class="font-semibold text-blue-800">All Leave Requests</h6>
+  </div>
+  <div
+    class="p-4 mt-6 bg-white rounded-lg shadow-md border-t-4 border-blue-600 overflow-x-auto"
+  >
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="bg-gray-50">
+          <th class="text-left p-3 font-semibold text-blue-800 border-b">
+            Leave ID
+          </th>
+          <th class="text-left p-3 font-semibold text-blue-800 border-b">
+            Employee
+          </th>
+          <th class="text-left p-3 font-semibold text-blue-800 border-b">
+            Leave Type
+          </th>
+          <th class="text-left p-3 font-semibold text-blue-800 border-b">
+            From Date
+          </th>
+          <th class="text-left p-3 font-semibold text-blue-800 border-b">
+            To Date
+          </th>
+          <th class="text-left p-3 font-semibold text-blue-800 border-b">
+            Days
+          </th>
+          <th class="text-left p-3 font-semibold text-blue-800 border-b">
+            Status
+          </th>
+          <th class="text-left p-3 font-semibold text-blue-800 border-b">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of leaveList; track $index) {
+        <tr class="hover:bg-gray-50">
+          <td class="p-3 border-b">{{ $index + 1 }}</td>
+          <td class="p-3 border-b">{{ item.employeeName }}</td>
+          <td class="p-3 border-b">{{ item.leaveType }}</td>
+          <td class="p-3 border-b">{{ item.fromDate | date : "dd-MMM-yy" }}</td>
+          <td class="p-3 border-b">{{ item.toDate | date : "dd-MMM-yy" }}</td>
+          <!-- <td class="p-3 border-b">{{ item.noOfDays }}</td> -->
+          <td class="p-3 border-b">
+            <span
+              class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs"
+              >Pending</span
+            >
+          </td>
+          <td class="p-3 border-b flex gap-2">
+            <button
+              class="px-2! py-1! bg-blue-100 text-blue-800 rounded-md! hover:bg-blue-200 transition-colors"
+            >
+              View
+            </button>
+            <button
+              class="px-2! py-1! bg-green-100 text-green-800 rounded-md! hover:bg-green-200 transition-colors"
+            >
+              Approve
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add Leave Modal -->
+  <div
+    class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 items-center justify-center p-4"
+    #addLeaveModal
+  >
+    <div
+      class="bg-white rounded-lg! w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl"
+    >
+      <div
+        class="flex justify-between items-center p-6! bg-blue-600 text-white rounded-t-lg!"
+      >
+        <h3 class="text-lg font-semibold">Add New Leave</h3>
+        <button
+          class="text-4xl! hover:text-red-800!"
+          (click)="closeLeaveModal()"
+        >
+          &times;
+        </button>
+      </div>
+      <div class="px-6! py-4!">
+        <form [formGroup]="leaveForm">
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <input type="hidden" formControlName="leaveId" />
+            <div class="mb-2">
+              <label class="block text-sm font-medium text-blue-800 mb-1"
+                >Leave Type</label
+              >
+              <select
+                formControlName="leaveType"
+                class="w-full px-3 py-2 border border-blue-600 rounded-md! focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+              >
+                <option value="">Select Leave Type</option>
+                <option value="Annual">Annual</option>
+                <option value="Sick">Sick</option>
+                <option value="Emergency">Emergency</option>
+                <option value="Maternity">Maternity</option>
+                <option value="Paternity">Paternity</option>
+              </select>
+            </div>
+
+            <div class="mb-2">
+              <label class="block text-sm font-medium text-blue-800 mb-1"
+                >From Date</label
+              >
+              <input
+                type="date"
+                formControlName="fromDate"
+                class="w-full px-3 py-2 border border-blue-600 rounded-md! focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+              />
+            </div>
+
+            <div class="mb-2">
+              <label class="block text-sm font-medium text-blue-800 mb-1"
+                >To Date</label
+              >
+              <input
+                type="date"
+                formControlName="toDate"
+                class="w-full px-3 py-2 border border-blue-600 rounded-md! focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+              />
+            </div>
+
+            <div class="mb-2">
+              <label class="block text-sm font-medium text-blue-800 mb-1"
+                >Number of Days</label
+              >
+              <input
+                type="number"
+                formControlName="noOfDays"
+                class="w-full px-3 py-2 border border-blue-600 rounded-md! focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+              />
+            </div>
+
+            <!-- Details -->
+            <div class="mb-2 col-span-2">
+              <label class="block text-sm font-medium text-blue-800 mb-1"
+                >Details</label
+              >
+              <textarea
+                formControlName="details"
+                rows="3"
+                required
+                placeholder="Reasons for Application"
+                class="w-full px-3 py-2 border border-blue-600 rounded-md! focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+              ></textarea>
+            </div>
+
+            <!-- Approval Fields (Hidden by default) -->
+            <input type="hidden" formControlName="isApproved" />
+            <input type="hidden" formControlName="approvedDate" />
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-blue-100">
+            <button
+              type="button"
+              class="px-4! py-1! bg-red-300 text-red-800 rounded-md! hover:bg-red-800 hover:text-white transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              (click)="saveLeave()"
+              class="px-4! py-1! bg-blue-600 text-white rounded-md! hover:bg-blue-700 transition-colors"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Leave Modal -->
+  <div
+    class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 items-center justify-center p-4"
+    #viewLeaveModal
+  >
+    <div
+      class="bg-white rounded-lg! w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl"
+    >
+      <div
+        class="flex justify-between items-center p-6! bg-blue-600 text-white rounded-t-lg!"
+      >
+        <h3 class="text-lg font-semibold">Leave Details</h3>
+        <button class="text-4xl! hover:text-red-800!">&times;</button>
+      </div>
+      <div class="px-6! py-4!">
+        <!-- Leave details content here -->
+        <div class="flex justify-end pt-4 border-t border-blue-100">
+          <button
+            class="px-4! py-1! bg-blue-600 text-white rounded-md! hover:bg-blue-700 transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
