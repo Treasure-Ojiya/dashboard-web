@@ -56,9 +56,9 @@ export class EmployeeService {
     );
   }
 
-  onDeleteEmployee(employeeId: number) {
-    return this.http.delete(
-      'https://freeapi.miniprojectideas.com/api/EmployeeLeave/DeleteEmployee/' +
+  onDeleteEmployee(employeeId: number): Observable<APIResponseModel> {
+    return this.http.delete<APIResponseModel>(
+      'https://freeapi.miniprojectideas.com/api/EmployeeLeave/DeleteEmployee?id=' +
         employeeId
     );
   }

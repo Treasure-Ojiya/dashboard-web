@@ -66,10 +66,11 @@ export class Employee implements OnInit {
   getEmployees() {
     this.employeeService.getAllEmployees().subscribe({
       next: (response: APIResponseModel) => {
-        this.employeeList = response.data;
+        // Force new array reference so Angular updates the UI
+        this.employeeList = [...response.data];
       },
       error: (error) => {
-        error.message;
+        console.error('Fetch employees error:', error.message);
       },
     });
   }
@@ -108,6 +109,43 @@ export class Employee implements OnInit {
 
     this.showModal(this.editModal);
   }
+
+  deleteEmployee(employeeId: number) {
+    this.employeeService.onDeleteEmployee(employeeId).subscribe({
+      next: () => {
+        // Always refresh on success (200 OK)
+        this.getEmployees();
+
+        // Adjust pagination in case the current page is now empty
+        if (this.startPage > this.totalPages) {
+          this.startPage = this.totalPages || 1;
+        }
+
+        alert('Employee Deleted Successfully');
+      },
+      error: (err) => {
+        console.error('Delete error:', err);
+        alert(`Error: ${err.error?.message || 'Failed to delete employee'}`);
+      },
+    });
+  }
+
+  // deleteEmployee(employeeId: number) {
+  //   this.employeeService.onDeleteEmployee(employeeId).subscribe({
+  //     next: (res: any) => {
+  //       if (res.result) {
+  //         this.getEmployees();
+  //         alert('Employee Deleted Successfully');
+  //       } else {
+  //         alert(res.message || 'Delete failed');
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Delete error:', err);
+  //       alert(`Error: ${err.error?.message || 'Failed to delete employee'}`);
+  //     },
+  //   });
+  // }
 
   private showModal(modal: ElementRef) {
     modal.nativeElement.classList.remove('hidden');
