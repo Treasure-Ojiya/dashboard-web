@@ -1,3 +1,6 @@
+
+#cfe2ff
+
 :root {
   --sidebar-bg: #1a1c22;
   --primary: #4361ee;
