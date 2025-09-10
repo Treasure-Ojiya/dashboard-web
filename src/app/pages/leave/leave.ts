@@ -117,6 +117,7 @@ export class Leave implements OnInit {
     this.employeeService.approveLeave(leaveId).subscribe({
       next: () => {
         this.GetAllLeaves();
+        this.loadLeaves();
       },
     });
   }
@@ -125,7 +126,40 @@ export class Leave implements OnInit {
     this.employeeService.rejectLeave(leaveId).subscribe({
       next: () => {
         this.GetAllLeaves();
+        this.loadLeaves();
       },
     });
+  }
+
+  pageSize = 10; // show 20 per page
+  currentPage = 1;
+
+  get paginatedLeaves() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.leaveList.slice(start, start + this.pageSize);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.leaveList.length / this.pageSize);
+  }
+
+  changePage(page: number) {
+    this.currentPage = page;
+  }
+
+  approvalPageSize = 10;
+  approvalCurrentPage = 1;
+
+  get paginatedApprovals() {
+    const start = (this.approvalCurrentPage - 1) * this.approvalPageSize;
+    return this.approvalLeaveList.slice(start, start + this.approvalPageSize);
+  }
+
+  get approvalTotalPages() {
+    return Math.ceil(this.approvalLeaveList.length / this.approvalPageSize);
+  }
+
+  changeApprovalPage(page: number) {
+    this.approvalCurrentPage = page;
   }
 }

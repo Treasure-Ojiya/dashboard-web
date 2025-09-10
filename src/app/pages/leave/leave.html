@@ -10,28 +10,6 @@
     </button>
   </div>
 
-  <!-- Tabs -->
-  <!-- <div class="flex mb-3! border-b-2 border-gray-300">
-    <button
-      (click)="changeTab('allLeaves')"
-      class="py-2 px-4 font-medium bg-blue-600 text-white border-b-2 border-blue-600 rounded-tl-lg! rounded-tr-lg!"
-    >
-      All Leaves
-    </button>
-    <button
-      (click)="changeTab('leaveRequests')"
-      class="py-2 px-4 font-medium text-gray-500 border-b-2 border-transparent hover:text-blue-600"
-    >
-      Leave Requests
-    </button>
-    <button
-      (click)="changeTab('approved')"
-      class="py-2 px-4 font-medium text-gray-500 border-b-2 border-transparent hover:text-blue-600"
-    >
-      Approved
-    </button>
-  </div> -->
-
   <div class="flex mb-3! border-b-2 border-gray-300">
     <button
       (click)="changeTab('allLeaves')"
@@ -96,9 +74,11 @@
           </tr>
         </thead>
         <tbody>
-          @for (item of leaveList; track $index) {
+          @for (item of paginatedLeaves; track $index) {
           <tr class="hover:bg-gray-50">
-            <td class="p-3 border-b">{{ $index + 1 }}</td>
+            <td class="p-3 border-b">
+              {{ $index + 1 + (currentPage - 1) * pageSize }}
+            </td>
             <td class="p-3 border-b">{{ item.employeeName }}</td>
             <td class="p-3 border-b">{{ item.leaveType }}</td>
             <td class="p-3 border-b">
@@ -124,20 +104,34 @@
             </td>
             <td class="p-3 border-b flex gap-2">
               <button
-                class="px-2! py-1! bg-blue-100 text-blue-800 rounded-md! hover:bg-blue-200 transition-colors view-leave-btn"
-              >
-                View
-              </button>
-              <button
                 class="px-2! py-1! bg-green-100 text-green-800 rounded-md! hover:bg-green-200 transition-colors"
+                (click)="approveLeave(item.leaveId)"
               >
                 Approve
+              </button>
+              <button
+                class="px-2! py-1! bg-red-100 text-red-800 rounded-md! hover:text-white hover:bg-red-800 transition-colors"
+                (click)="rejectLeave(item.leaveId)"
+              >
+                Reject
               </button>
             </td>
           </tr>
           }
         </tbody>
       </table>
+      <div class="flex gap-2 justify-center mt-4">
+        @for (page of [].constructor(totalPages); let i = $index; track i) {
+        <button
+          (click)="changePage(i + 1)"
+          [class.bg-blue-600]="currentPage === i + 1"
+          [class.text-white]="currentPage === i + 1"
+          class="px-3 py-1 border rounded-md! hover:bg-blue-500 hover:text-white"
+        >
+          {{ i + 1 }}
+        </button>
+        }
+      </div>
     </div>
     }@else{
     <div
@@ -177,9 +171,11 @@
           </tr>
         </thead>
         <tbody>
-          @for (item of approvalLeaveList; track $index) {
+          @for (item of paginatedApprovals; track $index) {
           <tr class="hover:bg-gray-50">
-            <td class="p-3 border-b">{{ $index + 1 }}</td>
+            <td class="p-3 border-b">
+              {{ $index + 1 + (approvalCurrentPage - 1) * approvalPageSize }}
+            </td>
             <td class="p-3 border-b">{{ item.employeeName }}</td>
             <td class="p-3 border-b">{{ item.leaveType }}</td>
             <td class="p-3 border-b">
@@ -221,6 +217,19 @@
           }
         </tbody>
       </table>
+      <div class="flex gap-2 justify-center mt-4">
+        @for (page of [].constructor(approvalTotalPages); let i = $index; track
+        i) {
+        <button
+          (click)="changeApprovalPage(i + 1)"
+          [class.bg-blue-600]="approvalCurrentPage === i + 1"
+          [class.text-white]="approvalCurrentPage === i + 1"
+          class="px-3 py-1 border rounded-md! hover:bg-blue-500 hover:text-white"
+        >
+          {{ i + 1 }}
+        </button>
+        }
+      </div>
     </div>
     }
   </div>
@@ -247,18 +256,6 @@
       <div class="px-6 py-4">
         <form [formGroup]="leaveForm">
           <div class="grid grid-cols-2 gap-4 mb-4">
-            <!-- <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Employee</label
-              >
-              <select
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400"
-              >
-                <option>Select Employee</option>
-                <option>John Doe (EMP-001)</option>
-                <option>Jane Smith (EMP-002)</option>
-              </select>
-            </div> -->
             <div class="mb-2">
               <label class="block text-sm font-medium text-blue-800 mb-1"
                 >Leave Type</label

@@ -38,6 +38,7 @@ export class Employee implements OnInit {
   @ViewChild('editModal') editModal!: ElementRef;
 
   employeeObj: EmployeeModel = new EmployeeModel();
+  Math: any;
 
   openModal() {
     if (this.newModal) {
@@ -113,43 +114,6 @@ export class Employee implements OnInit {
     modal.nativeElement.classList.add('flex');
   }
 
-  // updateEmployee() {
-  //   this.employeeService.onUpdateEmployee(this.employeeObj).subscribe({
-  //     next: (res: any) => {
-  //       if (res.result) {
-  //         this.getEmployees();
-  //         alert('Employee Updated Successfully');
-  //       } else {
-  //         res.message;
-  //       }
-  //     },
-  //     error: () => {},
-  //   });
-  // }
-
-  // updateEmployee() {
-  //   const payload = {
-  //     ...this.employeeObj,
-  //     deptId: Number(this.employeeObj.deptId), // Ensure number type
-  //   };
-
-  //   this.employeeService.onUpdateEmployee(payload).subscribe({
-  //     next: (res: any) => {
-  //       if (res.result) {
-  //         this.getEmployees(); // Refresh list
-  //         this.closeModal('edit'); // Close edit modal specifically
-  //         alert('Employee Updated Successfully');
-  //       } else {
-  //         alert(res.message || 'Update failed');
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error('Update error:', err);
-  //       alert(`Error: ${err.error?.message || 'Failed to update employee'}`);
-  //     },
-  //   });
-  // }
-
   updateEmployee() {
     // Convert string deptId back to number for the API payload
     const payload = {
@@ -173,5 +137,41 @@ export class Employee implements OnInit {
         alert(`Error: ${err.error?.message || 'Failed to update employee'}`);
       },
     });
+  }
+
+  pageBreak = 10;
+  startPage = 1;
+
+  get paginatedEmployees() {
+    const begin = (this.startPage - 1) * this.pageBreak;
+    return this.employeeList.slice(begin, begin + this.pageBreak);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.employeeList.length / this.pageBreak);
+  }
+
+  changePage(page: number) {
+    this.startPage = page;
+  }
+
+  get visiblePages(): number[] {
+    const total = this.totalPages;
+    const current = this.startPage;
+    const maxVisible = 5;
+
+    let start = Math.max(1, current - Math.floor(maxVisible / 2));
+    let end = start + maxVisible - 1;
+
+    if (end > total) {
+      end = total;
+      start = Math.max(1, end - maxVisible + 1);
+    }
+
+    const pages = [];
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 }
