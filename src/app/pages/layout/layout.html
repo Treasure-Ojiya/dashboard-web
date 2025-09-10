@@ -1,16 +1,23 @@
-<div class="dashboard hidden md:block">
+<div
+  class="dashboard hidden md:grid grid-cols-[280px_1fr] min-h-screen bg-[#f8fafc] font-sans text-text-dark"
+>
   <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="brand">
-      <div class="logo"></div>
-      <h1>Spectre</h1>
+  <div class="sidebar bg-sidebar-bg text-text-light relative z-10">
+    <div class="brand flex items-center p-6 border-b border-white/10">
+      <div
+        class="logo w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg mr-3"
+      ></div>
+      <h1 class="text-xl font-semibold m-0">Spectre</h1>
     </div>
     <div class="nav-menu">
-      <ul>
+      <ul class="py-4">
         <li class="active">
-          <a routerLink="/dashboard">
-            <div class="nav-icon">
-              <svg viewBox="0 0 24 24">
+          <a
+            routerLink="/dashboard"
+            class="flex items-center py-3 px-6 text-[#001e46]! no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#b5ffff] hover:rounded-r-[20px]"
+          >
+            <div class="nav-icon w-6 h-6 mr-3 flex items-center justify-center">
+              <svg viewBox="0 0 24 24" class="w-5 h-5">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
               </svg>
             </div>
@@ -18,9 +25,12 @@
           </a>
         </li>
         <li>
-          <a routerLink="/employee">
-            <div class="nav-icon">
-              <svg viewBox="0 0 24 24">
+          <a
+            routerLink="/employee"
+            class="flex items-center py-3 px-6 text-[#001e46]! no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#b5ffff] hover:rounded-r-[20px]"
+          >
+            <div class="nav-icon w-6 h-6 mr-3 flex items-center justify-center">
+              <svg viewBox="0 0 24 24" class="w-5 h-5">
                 <path
                   d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
                 />
@@ -30,9 +40,12 @@
           </a>
         </li>
         <li>
-          <a routerLink="/leave">
-            <div class="nav-icon">
-              <svg viewBox="0 0 24 24">
+          <a
+            routerLink="/leave"
+            class="flex items-center py-3 px-6 text-[#001e46]! no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#b5ffff] hover:rounded-r-[20px]"
+          >
+            <div class="nav-icon w-6 h-6 mr-3 flex items-center justify-center">
+              <svg viewBox="0 0 24 24" class="w-5 h-5">
                 <path
                   d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm7 4h5v5h-5z"
                 />
@@ -41,58 +54,57 @@
             <span>Leave Management</span>
           </a>
         </li>
-        <li class="has-dropdown">
-          <a href="#">
-            <div class="nav-icon">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
-                />
-              </svg>
-            </div>
-            <span>Reports</span>
-            <div class="dropdown-arrow"></div>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a href="#" class="dropdown-li">Monthly Report</a></li>
-            <li><a href="#" class="dropdown-li">Annual Report</a></li>
-            <li><a href="#" class="dropdown-li">Leave Analysis</a></li>
-            <li><a href="#" class="dropdown-li">Attendance</a></li>
-          </ul>
-        </li>
-        <li class="has-dropdown">
-          <a href="#">
-            <div class="nav-icon">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"
-                />
-              </svg>
-            </div>
-            <span>Settings</span>
-            <div class="dropdown-arrow"></div>
-          </a>
-          <ul class="dropdown-menu">
-            <li class="dropdown-li">
-              <a href="#" class="dropdown-li">System Settings</a>
-            </li>
-            <li class="dropdown-li">
-              <a href="#" class="dropdown-li">User Management</a>
-            </li>
-            <li class="dropdown-li">
-              <a href="#" class="dropdown-li">Leave Policies</a>
-            </li>
-            <li class="dropdown-li">
-              <a href="#" class="dropdown-li">Notification Settings</a>
-            </li>
-          </ul>
-        </li>
+
+        <button
+          matButton
+          [matMenuTriggerFor]="siteActions"
+          class="text-[#001e46]!"
+        >
+          Site Actions
+        </button>
+        <mat-menu #siteActions="matMenu" class="bg-[#001e46]!">
+          <button
+            mat-menu-item
+            [matMenuTriggerFor]="reports"
+            class="text-white!"
+          >
+            Reports
+          </button>
+          <button
+            mat-menu-item
+            [matMenuTriggerFor]="settings"
+            class="text-white! py-2!"
+          >
+            Settings
+          </button>
+        </mat-menu>
+
+        <mat-menu #reports="matMenu" class="bg-[#001e46]!">
+          <button mat-menu-item class="text-white!">Monthly Report</button>
+          <button mat-menu-item class="text-white!">Annual Report</button>
+          <button mat-menu-item class="text-white!">RLeave Analysis</button>
+          <button mat-menu-item class="text-white!">Attendance</button>
+        </mat-menu>
+
+        <mat-menu #settings="matMenu" class="bg-[#001e46]!">
+          <button mat-menu-item class="text-white!">System Settings</button>
+          <button mat-menu-item class="text-white!">User Management</button>
+          <button mat-menu-item class="text-white!">Leave Policies</button>
+          <button mat-menu-item class="text-white!">
+            Notification Settings
+          </button>
+        </mat-menu>
       </ul>
     </div>
-    <div class="sidebar-footer">
-      <button (click)="logoutFn()" class="logout-btn">
-        <div class="nav-icon">
-          <svg viewBox="0 0 24 24">
+    <div
+      class="sidebar-footer absolute bottom-0 left-0 right-0 p-6 border-t border-white/10"
+    >
+      <button
+        (click)="logoutFn()"
+        class="logout-btn w-full flex items-center py-3 px-6 bg-transparent border-none text-[#001e46] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:text-red-500 hover:bg-white/5"
+      >
+        <div class="nav-icon w-6 h-6 mr-3 flex items-center justify-center">
+          <svg viewBox="0 0 24 24" class="w-5 h-5">
             <path
               d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"
             />
@@ -104,7 +116,7 @@
   </div>
 
   <!-- Main Content -->
-  <div class="main-content">
+  <div class="main-content flex flex-col min-h-screen">
     <router-outlet></router-outlet>
   </div>
 </div>

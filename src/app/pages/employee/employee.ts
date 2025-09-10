@@ -130,23 +130,6 @@ export class Employee implements OnInit {
     });
   }
 
-  // deleteEmployee(employeeId: number) {
-  //   this.employeeService.onDeleteEmployee(employeeId).subscribe({
-  //     next: (res: any) => {
-  //       if (res.result) {
-  //         this.getEmployees();
-  //         alert('Employee Deleted Successfully');
-  //       } else {
-  //         alert(res.message || 'Delete failed');
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error('Delete error:', err);
-  //       alert(`Error: ${err.error?.message || 'Failed to delete employee'}`);
-  //     },
-  //   });
-  // }
-
   private showModal(modal: ElementRef) {
     modal.nativeElement.classList.remove('hidden');
     modal.nativeElement.classList.add('flex');

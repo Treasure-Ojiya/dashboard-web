@@ -1,44 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { MatMenu, MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, RouterLink, CommonModule],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    CommonModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatMenuTrigger,
+  ],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })
 export class Layout {
-  // dropdown states
-  // isReportsOpen = false;
-  // isSettingsOpen = false;
-
-  // // sidebar state
-  // isSidebarOpen = false;
-
-  // toggleReports() {
-  //   this.isReportsOpen = !this.isReportsOpen;
-  // }
-
-  // toggleSettings() {
-  //   this.isSettingsOpen = !this.isSettingsOpen;
-  // }
-
-  // toggleSidebar() {
-  //   this.isSidebarOpen = !this.isSidebarOpen;
-  // }
-
-  // closeSidebar() {
-  //   this.isSidebarOpen = false;
-  // }
-
-  sidebarOpen = false;
-
-  toggleSidebar() {
-    this.sidebarOpen = !this.sidebarOpen;
-  }
-
   router = inject(Router);
+  // vertebrates: MatMenuPanel<any> | null | undefined;
   logoutFn() {
     localStorage.removeItem('leaveUser');
     this.router.navigateByUrl('/login');
