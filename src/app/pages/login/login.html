@@ -1,36 +1,75 @@
-<div class="login-container">
+<div class="login-container relative">
   <div class="login-card">
     <h2>Employee Dashboard</h2>
 
-    <form class="login-form">
+    <form [formGroup]="loginFormObj" class="login-form">
       <div class="form-group">
         <label for="email">Email</label>
         <input
           type="email"
-          [(ngModel)]="loginObj.emailId"
           id="email"
           name="emailId"
+          class="form-control"
+          formControlName="emailId"
           required
           placeholder="Enter your email"
         />
+        @if (loginFormObj.get('emailId')?.touched &&
+        loginFormObj.get('emailId')?.invalid) {
+        <div class="error-message">
+          <small class="text-red-500 font-bold">
+            @if (loginFormObj.get('emailId')?.errors?.['required']){ Input Email
+            } @if(loginFormObj.get('emailId')?.errors?.['email']){Enter valid
+            email}
+          </small>
+        </div>
+        }
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
         <input
           type="password"
-          [(ngModel)]="loginObj.password"
           id="password"
           name="password"
+          class="form-control"
+          formControlName="password"
           required
           placeholder="Enter your password"
         />
+        @if (loginFormObj.get('password')?.touched &&
+        loginFormObj.get('password')?.invalid) {
+        <div>
+          <small class="text-red-500 font-bold">
+            @if (loginFormObj.get('password')?.errors?.['required']) {Input
+            password} @if (loginFormObj.get('password')?.errors?.['minlength'])
+            {Too short, at least 6 characters} @if
+            (loginFormObj.get('password')?.errors?.['maxlength']) {Too long, not
+            more than 8 characters} @if
+            (loginFormObj.get('password')?.errors?.['beNumbersOnly']) { Should
+            contain only numbers }
+          </small>
+        </div>
+        }
       </div>
 
       <button type="submit" class="login-button" (click)="onLogin()">
         Sign In
       </button>
     </form>
+
+    <!-- Messages -->
+    @if (loginSuccess) {
+    <small
+      class="font-bold text-green-500 absolute top-2 right-1/2 transform translate-x-1/2"
+    >
+      {{ loginSuccess }}
+    </small>
+    } @if (loginError) {
+    <small class="text-red-500 font-bold">
+      {{ loginError }}
+    </small>
+    }
 
     <div class="login-footer">
       <a href="/forgot-password">Forgot password?</a>
