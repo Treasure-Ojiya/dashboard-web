@@ -1,4 +1,18 @@
-<div class="p-6 bg-gray-50">
+<!-- <div class="fixed inset-0 flex items-center justify-center z-50">
+  <app-spinner [loader]="loader" />
+</div> -->
+
+@if (successMessage) {
+<div
+  class="fixed top-4 right-4 z-50 px-4 py-2 bg-green-100 text-green-800 rounded-md shadow-lg transform transition-transform duration-500 ease-in-out"
+  [class.translate-x-0]="successMessage"
+  [class.translate-x-40]="!successMessage"
+>
+  {{ successMessage }}
+</div>
+}
+
+<div class="p-6 bg-gray-50 relative">
   <!-- Page Header -->
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-semibold text-blue-800">Leave Management</h2>
@@ -77,7 +91,7 @@
           @for (item of paginatedLeaves; track $index) {
           <tr class="hover:bg-gray-50">
             <td class="p-3 border-b">
-              {{ $index + 1 + (currentPage - 1) * pageSize }}
+              {{ $index + 1 + (startPage - 1) * pageBreak }}
             </td>
             <td class="p-3 border-b">{{ item.employeeName }}</td>
             <td class="p-3 border-b">{{ item.leaveType }}</td>
@@ -120,17 +134,106 @@
           }
         </tbody>
       </table>
-      <div class="flex gap-2 justify-center mt-4">
-        @for (page of [].constructor(totalPages); let i = $index; track i) {
+      <div class="flex gap-2 justify-center mt-4 items-center">
+        <!-- Jump to First -->
         <button
-          (click)="changePage(i + 1)"
-          [class.bg-blue-600]="currentPage === i + 1"
-          [class.text-white]="currentPage === i + 1"
+          (click)="changePage(1)"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+          [disabled]="startPage === 1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 19l-7-7 7-7m8 14V5"
+            />
+          </svg>
+        </button>
+
+        <!-- Previous -->
+        <button
+          (click)="changePage(startPage - 1)"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+          [disabled]="startPage === 1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        <!-- Page Numbers -->
+        @for (page of visiblePages; track page) {
+        <button
+          (click)="changePage(page)"
+          [class.bg-blue-600]="startPage === page"
+          [class.text-white]="startPage === page"
           class="px-3 py-1 border rounded-md! hover:bg-blue-500 hover:text-white"
         >
-          {{ i + 1 }}
+          {{ page }}
         </button>
         }
+
+        <!-- Next -->
+        <button
+          (click)="changePage(startPage + 1)"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+          [disabled]="startPage === totalPages"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+
+        <!-- Jump to Last -->
+        <button
+          (click)="changePage(totalPages)"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+          [disabled]="startPage === totalPages"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 5l7 7-7 7M5 5v14"
+            />
+          </svg>
+        </button>
       </div>
     </div>
     }@else{
@@ -174,7 +277,7 @@
           @for (item of paginatedApprovals; track $index) {
           <tr class="hover:bg-gray-50">
             <td class="p-3 border-b">
-              {{ $index + 1 + (approvalCurrentPage - 1) * approvalPageSize }}
+              {{ $index + 1 + (approvalStartPage - 1) * approvalPageBreak }}
             </td>
             <td class="p-3 border-b">{{ item.employeeName }}</td>
             <td class="p-3 border-b">{{ item.leaveType }}</td>
@@ -217,33 +320,121 @@
           }
         </tbody>
       </table>
-      <div class="flex gap-2 justify-center mt-4">
-        @for (page of [].constructor(approvalTotalPages); let i = $index; track
-        i) {
+      <div class="flex gap-2 justify-center mt-4 items-center">
+        <!-- Jump to First -->
         <button
-          (click)="changeApprovalPage(i + 1)"
-          [class.bg-blue-600]="approvalCurrentPage === i + 1"
-          [class.text-white]="approvalCurrentPage === i + 1"
+          (click)="changeApprovalPage(1)"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+          [disabled]="approvalStartPage === 1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 19l-7-7 7-7m8 14V5"
+            />
+          </svg>
+        </button>
+
+        <!-- Previous -->
+        <button
+          (click)="changeApprovalPage(approvalStartPage - 1)"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+          [disabled]="approvalStartPage === 1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        <!-- Page Numbers -->
+        @for (page of visibleApprovalPages; track page) {
+        <button
+          (click)="changeApprovalPage(page)"
+          [class.bg-blue-600]="approvalStartPage === page"
+          [class.text-white]="approvalStartPage === page"
           class="px-3 py-1 border rounded-md! hover:bg-blue-500 hover:text-white"
         >
-          {{ i + 1 }}
+          {{ page }}
         </button>
         }
+
+        <!-- Next -->
+        <button
+          (click)="changeApprovalPage(approvalStartPage + 1)"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+          [disabled]="approvalStartPage === approvalTotalPages"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+
+        <!-- Jump to Last -->
+        <button
+          (click)="changeApprovalPage(approvalTotalPages)"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+          [disabled]="approvalStartPage === approvalTotalPages"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 5l7 7-7 7M5 5v14"
+            />
+          </svg>
+        </button>
       </div>
     </div>
     }
   </div>
 
   <div
-    class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50"
+    class="absolute inset-0 rounded-md! hidden z-50 items-center justify-center transition-opacity duration-600 ease-in-out p-4!"
     id="addLeaveModal"
     #newModal
   >
     <div
-      class="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl"
+      class="bg-white rounded-lg! w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-xl transition-all duration-600 ease-in-out"
     >
       <div
-        class="flex justify-between items-center p-6 bg-blue-600 text-white rounded-t-lg"
+        class="flex justify-between items-center p-3! bg-blue-600 text-white rounded-t-lg!"
       >
         <h3 class="text-lg font-semibold">Add New Leave</h3>
         <button
@@ -253,7 +444,7 @@
           &times;
         </button>
       </div>
-      <div class="px-6 py-4">
+      <div class="px-6! py-4!">
         <form [formGroup]="leaveForm">
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div class="mb-2">
@@ -276,7 +467,7 @@
               <input
                 formControlName="fromDate"
                 type="date"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400"
+                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
               />
             </div>
             <div class="mb-2">
@@ -286,7 +477,7 @@
               <input
                 formControlName="toDate"
                 type="date"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400"
+                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
               />
             </div>
             <div class="mb-2">
@@ -296,7 +487,7 @@
               <input
                 formControlName="noOfDays"
                 type="number"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400"
+                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
               />
             </div>
             <div class="mb-2 col-span-2">
@@ -305,7 +496,7 @@
               >
               <textarea
                 formControlName="details"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 h-24"
+                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
               ></textarea>
             </div>
           </div>

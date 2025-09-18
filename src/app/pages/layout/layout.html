@@ -1,3 +1,7 @@
+<div>
+  <app-spinner [loader]="loader" />
+</div>
+
 <div
   class="dashboard hidden md:grid grid-cols-[280px_1fr] min-h-screen bg-[#f8fafc] font-sans text-text-dark"
 >
@@ -61,7 +65,7 @@
           </a>
         </li>
 
-        <button
+        <!-- <button
           matButton
           [matMenuTriggerFor]="siteActions"
           class="text-[#001e46]!"
@@ -99,25 +103,25 @@
           <button mat-menu-item class="text-white!">
             Notification Settings
           </button>
-        </mat-menu>
+        </mat-menu> -->
       </ul>
-    </div>
-    <div
-      class="sidebar-footer absolute bottom-0 left-0 right-0 p-6 border-t border-white/10"
-    >
-      <button
-        (click)="logoutFn()"
-        class="logout-btn w-full flex items-center py-3 px-6 bg-transparent border-none text-[#001e46] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:text-red-500 hover:bg-white/5"
+      <div
+        class="sidebar-footer absolute bottom-0 left-0 right-0 p-6 border-t border-white/10"
       >
-        <div class="nav-icon w-6 h-6 mr-3 flex items-center justify-center">
-          <svg viewBox="0 0 24 24" class="w-5 h-5">
-            <path
-              d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"
-            />
-          </svg>
-        </div>
-        <span>Logout</span>
-      </button>
+        <button
+          (click)="logoutFn()"
+          class="logout-btn w-full flex items-center py-3 px-6 bg-transparent border-none text-[#001e46] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:text-red-500 hover:bg-white/5"
+        >
+          <div class="nav-icon w-6 h-6 mr-3 flex items-center justify-center">
+            <svg viewBox="0 0 24 24" class="w-5 h-5">
+              <path
+                d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"
+              />
+            </svg>
+          </div>
+          <span>Logout</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -126,3 +130,4 @@
     <router-outlet></router-outlet>
   </div>
 </div>
+<app-toast></app-toast>

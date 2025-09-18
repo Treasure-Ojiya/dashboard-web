@@ -8,6 +8,7 @@ import {
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EmployeeService } from '../../services/employee';
 import { DatePipe, NgClass } from '@angular/common';
+import { ToastService } from '../../services/toast-message/toast-component';
 
 @Component({
   selector: 'app-leave',
@@ -18,6 +19,8 @@ import { DatePipe, NgClass } from '@angular/common';
 export class Leave implements OnInit {
   @ViewChild('newModal') newModal!: ElementRef;
   employeeService = inject(EmployeeService);
+  toastService = inject(ToastService);
+  successMessage: string = '';
 
   leaveForm: FormGroup = new FormGroup({
     leaveId: new FormControl(0),
@@ -81,23 +84,35 @@ export class Leave implements OnInit {
       formValue.noOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
     }
 
+    const loggedData = localStorage.getItem('leaveUser');
+    if (loggedData != null) {
+      const loggedParseData = JSON.parse(loggedData);
+      formValue.employeeId = loggedParseData.employeeId;
+    }
+
     this.employeeService.toAddLeave(formValue).subscribe({
       next: (res: any) => {
         if (res.result) {
           this.loadLeaves();
+          this.GetAllLeaves();
           this.leaveForm.reset();
           this.closeModal();
-          alert('Leave added successfully!');
+
+          // show toast
+          this.toastService.show('Leave Applied Successfully', 'success');
+
+          setTimeout(() => (this.successMessage = ''), 3000);
         } else {
-          alert(res.message || 'Unable to add leave.');
+          this.successMessage = res.message || 'Unable to add leave.';
+          setTimeout(() => (this.successMessage = ''), 3000);
         }
       },
       error: () => {
-        alert('Something went wrong. Please try again.');
+        this.successMessage = 'Something went wrong. Please try again.';
+        setTimeout(() => (this.successMessage = ''), 3000);
       },
     });
   }
-
   approvalLeaveList: any[] = [];
   currentTab: string = 'allLeaves';
   changeTab(tabName: string) {
@@ -131,35 +146,75 @@ export class Leave implements OnInit {
     });
   }
 
-  pageSize = 10; // show 20 per page
-  currentPage = 1;
+  pageBreak = 10;
+  startPage = 1;
+  approvalPageBreak = 10;
+  approvalStartPage = 1;
 
   get paginatedLeaves() {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.leaveList.slice(start, start + this.pageSize);
+    const begin = (this.startPage - 1) * this.pageBreak;
+    return this.leaveList.slice(begin, begin + this.pageBreak);
   }
 
   get totalPages() {
-    return Math.ceil(this.leaveList.length / this.pageSize);
+    return Math.ceil(this.leaveList.length / this.pageBreak);
   }
 
   changePage(page: number) {
-    this.currentPage = page;
+    this.startPage = page;
   }
 
-  approvalPageSize = 10;
-  approvalCurrentPage = 1;
+  get visiblePages(): number[] {
+    const total = this.totalPages;
+    const current = this.startPage;
+    const maxVisible = 5;
 
+    let start = Math.max(1, current - Math.floor(maxVisible / 2));
+    let end = start + maxVisible - 1;
+
+    if (end > total) {
+      end = total;
+      start = Math.max(1, end - maxVisible + 1);
+    }
+
+    const pages = [];
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  // Approval pagination methods
   get paginatedApprovals() {
-    const start = (this.approvalCurrentPage - 1) * this.approvalPageSize;
-    return this.approvalLeaveList.slice(start, start + this.approvalPageSize);
+    const begin = (this.approvalStartPage - 1) * this.approvalPageBreak;
+    return this.approvalLeaveList.slice(begin, begin + this.approvalPageBreak);
   }
 
   get approvalTotalPages() {
-    return Math.ceil(this.approvalLeaveList.length / this.approvalPageSize);
+    return Math.ceil(this.approvalLeaveList.length / this.approvalPageBreak);
   }
 
   changeApprovalPage(page: number) {
-    this.approvalCurrentPage = page;
+    this.approvalStartPage = page;
+  }
+
+  get visibleApprovalPages(): number[] {
+    const total = this.approvalTotalPages;
+    const current = this.approvalStartPage;
+    const maxVisible = 5;
+
+    let start = Math.max(1, current - Math.floor(maxVisible / 2));
+    let end = start + maxVisible - 1;
+
+    if (end > total) {
+      end = total;
+      start = Math.max(1, end - maxVisible + 1);
+    }
+
+    const pages = [];
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 }

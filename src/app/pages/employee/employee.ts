@@ -16,17 +16,20 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { Spinner } from '../../spinner/spinner';
+import { ToastService } from '../../services/toast-message/toast-component';
 
 @Component({
   selector: 'app-employee',
   standalone: true,
-  imports: [CommonModule, AsyncPipe, FormsModule],
+  imports: [CommonModule, AsyncPipe, FormsModule, Spinner],
   templateUrl: './employee.html',
   styleUrl: './employee.css',
   encapsulation: ViewEncapsulation.None,
 })
 export class Employee implements OnInit {
   employeeService = inject(EmployeeService);
+  toastService = inject(ToastService);
 
   employeeList: EmployeeList[] = [];
 
@@ -39,6 +42,9 @@ export class Employee implements OnInit {
 
   employeeObj: EmployeeModel = new EmployeeModel();
   Math: any;
+  addSuccess: string = '';
+  addError: string = '';
+  loader = false;
 
   openModal() {
     if (this.newModal) {
@@ -64,29 +70,45 @@ export class Employee implements OnInit {
   }
 
   getEmployees() {
+    this.loader = true;
     this.employeeService.getAllEmployees().subscribe({
       next: (response: APIResponseModel) => {
-        // Force new array reference so Angular updates the UI
         this.employeeList = [...response.data];
+        this.loader = false;
       },
       error: (error) => {
         console.error('Fetch employees error:', error.message);
+        this.loader = false;
       },
     });
   }
 
   addEmployee() {
+    this.loader = true; // show spinner if desired
+    this.addSuccess = '';
+    this.addError = '';
+
     this.employeeService.onAddEmployee(this.employeeObj).subscribe({
       next: (res: any) => {
+        this.loader = false;
+
         if (res.result) {
           this.getEmployees();
-          alert('Employee Created Successfully');
+          this.toastService.show('Empployee added successfully!', 'success');
           this.closeModal();
+
+          // auto-hide success message after 3 seconds
+          setTimeout(() => {
+            this.addSuccess = '';
+          }, 3000);
         } else {
-          res.message;
+          this.addError = res.message || 'Failed to create employee';
         }
       },
-      error: () => {},
+      error: (err) => {
+        this.loader = false;
+        this.addError = err.error?.message || 'Failed to create employee';
+      },
     });
   }
 
@@ -113,19 +135,27 @@ export class Employee implements OnInit {
   deleteEmployee(employeeId: number) {
     this.employeeService.onDeleteEmployee(employeeId).subscribe({
       next: () => {
-        // Always refresh on success (200 OK)
-        this.getEmployees();
+        // ✅ Remove locally so UI updates instantly
+        this.employeeList = this.employeeList.filter(
+          (emp) => emp.employeeId !== employeeId
+        );
 
-        // Adjust pagination in case the current page is now empty
+        // ✅ Refresh from API to stay in sync
+        // this.getEmployees();
+
+        // ✅ Adjust pagination in case the page became empty
         if (this.startPage > this.totalPages) {
           this.startPage = this.totalPages || 1;
         }
 
-        alert('Employee Deleted Successfully');
+        this.toastService.show('Employee Deleted Successfully', 'success');
       },
       error: (err) => {
         console.error('Delete error:', err);
-        alert(`Error: ${err.error?.message || 'Failed to delete employee'}`);
+        this.toastService.show(
+          `Error: ${err.error?.message || 'Failed to delete employee'}`,
+          'error'
+        );
       },
     });
   }
