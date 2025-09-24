@@ -8,8 +8,8 @@ import { ToastService } from '../services/toast-message/toast-component';
   standalone: true,
   imports: [CommonModule],
   template: `
+    @if(message){
     <div
-      *ngIf="message"
       class="fixed top-5 right-5 px-4 py-3 rounded-lg shadow-lg text-white transition-opacity duration-500"
       [ngClass]="{
         'bg-green-600': type === 'success',
@@ -18,6 +18,7 @@ import { ToastService } from '../services/toast-message/toast-component';
     >
       {{ message }}
     </div>
+    }
   `,
 })
 export class ToastComponent implements OnInit {

@@ -5,7 +5,9 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
   standalone: true,
   template: `
     @if(showSpinner){
-    <div class="fixed inset-0 flex items-center justify-center z-50">
+    <div
+      class="absolute top-1/2 left-[55%]  flex items-center justify-center z-50"
+    >
       <div
         class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
       ></div>
