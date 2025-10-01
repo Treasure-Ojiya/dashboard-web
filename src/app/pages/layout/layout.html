@@ -2,138 +2,246 @@
   <app-spinner [loader]="loader" />
 </div>
 
+<!-- Mobile Header -->
 <div
-  class="dashboard hidden md:grid grid-cols-[280px_1fr] min-h-screen bg-[#f8fafc] font-sans text-text-dark"
+  class="md:hidden bg-sidebar-bg text-text-light p-4 flex justify-between items-center sticky top-0 z-40"
 >
-  <!-- Sidebar -->
-  <div class="sidebar bg-sidebar-bg text-text-light relative z-10">
-    <div class="brand flex items-center py-3! px-6!">
+  <div class="brand flex items-center">
+    <div
+      class="logo w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg mr-3"
+    ></div>
+    <h1 class="text-xl font-semibold m-0">Spectre</h1>
+  </div>
+
+  <!-- Hamburger Menu Button -->
+  <button
+    id="mobileMenuButton"
+    class="text-text-light p-2"
+    (click)="toggleMobileMenu()"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 6h16M4 12h16M4 18h16"
+      ></path>
+    </svg>
+  </button>
+</div>
+
+<!-- Mobile Menu Overlay -->
+<div
+  id="mobileMenuOverlay"
+  class="md:hidden fixed inset-0 bg-white z-50 hidden"
+  (click)="closeMobileMenu()"
+></div>
+
+<!-- Mobile Sidebar -->
+<div
+  id="mobileSidebar"
+  class="md:hidden fixed top-0 left-0 h-full w-64 bg-sidebar-bg text-text-light z-50 transform -translate-x-full transition-transform duration-300"
+>
+  <div class="p-4 flex justify-between items-center border-b border-white/10">
+    <div class="brand flex items-center">
       <div
         class="logo w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg mr-3"
       ></div>
       <h1 class="text-xl font-semibold m-0">Spectre</h1>
     </div>
-    <div class="nav-menu">
-      <ul class="py-4">
-        <li class="active">
-          <a
-            routerLink="/dashboard"
-            class="flex items-center py-3 px-6 text-[#001e46]! font-bold no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#cfe2ff] hover:rounded-md!"
-          >
-            <div
-              class="nav-icon w-6 h-6 mr-3 px-0.5! flex items-center justify-center"
-            >
-              <img
-                src="assets/icons/home-rounded.svg"
-                alt=""
-                width="30"
-                height="30"
-              />
-            </div>
-            <span>Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/employee"
-            class="flex items-center py-3 px-6 text-[#001e46]! font-bold no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#cfe2ff] hover:rounded-md!"
-          >
-            <div
-              class="nav-icon w-6 h-6 mr-3 px-0.5! flex items-center justify-center"
-            >
-              <img
-                src="assets/icons/raphael--users-blue.svg"
-                alt=""
-                width="30"
-                height="30"
-              />
-            </div>
-            <span>Employees</span>
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/leave"
-            class="flex items-center py-3 px-6 text-[#001e46]! font-bold no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#cfe2ff] hover:rounded-md!"
-          >
-            <div
-              class="nav-icon w-6 h-6 mr-3 px-0.5! flex items-center justify-center"
-            >
-              <img
-                src="assets/icons/solar--exit-bold-blue.svg"
-                alt=""
-                width="30"
-                height="30"
-              />
-            </div>
-            <span>Leave Management</span>
-          </a>
-        </li>
-
-        <!-- <button
-          matButton
-          [matMenuTriggerFor]="siteActions"
-          class="text-[#001e46]!"
-        >
-          Site Actions
-        </button>
-        <mat-menu #siteActions="matMenu" class="bg-[#001e46]!">
-          <button
-            mat-menu-item
-            [matMenuTriggerFor]="reports"
-            class="text-white!"
-          >
-            Reports
-          </button>
-          <button
-            mat-menu-item
-            [matMenuTriggerFor]="settings"
-            class="text-white! py-2!"
-          >
-            Settings
-          </button>
-        </mat-menu>
-
-        <mat-menu #reports="matMenu" class="bg-[#001e46]!">
-          <button mat-menu-item class="text-white!">Monthly Report</button>
-          <button mat-menu-item class="text-white!">Annual Report</button>
-          <button mat-menu-item class="text-white!">Leave Analysis</button>
-          <button mat-menu-item class="text-white!">Attendance</button>
-        </mat-menu>
-
-        <mat-menu #settings="matMenu" class="bg-[#001e46]!">
-          <button mat-menu-item class="text-white!">System Settings</button>
-          <button mat-menu-item class="text-white!">User Management</button>
-          <button mat-menu-item class="text-white!">Leave Policies</button>
-          <button mat-menu-item class="text-white!">
-            Notification Settings
-          </button>
-        </mat-menu> -->
-      </ul>
-      <div
-        class="sidebar-footer absolute bottom-0 left-0 right-0 p-6! border-t border-white/10"
+    <button class="text-text-light p-2" (click)="closeMobileMenu()">
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
       >
-        <button
-          (click)="logoutFn()"
-          class="logout-btn w-full flex items-center py-3 px-6 bg-transparent border-none text-[#001e46] font-bold cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:text-red-500 hover:bg-white/5"
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        ></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="nav-menu h-full overflow-y-auto">
+    <ul class="py-4">
+      <li class="active">
+        <a
+          routerLink="/dashboard"
+          class="flex items-center py-3 px-6 text-[#001e46]! font-bold no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#cfe2ff] hover:rounded-md!"
+          (click)="closeMobileMenu()"
         >
-          <div class="nav-icon w-6 h-6 mr-3 flex items-center justify-center">
+          <div
+            class="nav-icon w-6 h-6 mr-3 px-0.5! flex items-center justify-center"
+          >
             <img
-              src="assets/icons/exit-blue.svg"
+              src="assets/icons/home-rounded.svg"
               alt=""
               width="30"
               height="30"
             />
           </div>
-          <span>Logout</span>
-        </button>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/employee"
+          class="flex items-center py-3 px-6 text-[#001e46]! font-bold no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#cfe2ff] hover:rounded-md!"
+          (click)="closeMobileMenu()"
+        >
+          <div
+            class="nav-icon w-6 h-6 mr-3 px-0.5! flex items-center justify-center"
+          >
+            <img
+              src="assets/icons/raphael--users-blue.svg"
+              alt=""
+              width="30"
+              height="30"
+            />
+          </div>
+          <span>Employees</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/leave"
+          class="flex items-center py-3 px-6 text-[#001e46]! font-bold no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#cfe2ff] hover:rounded-md!"
+          (click)="closeMobileMenu()"
+        >
+          <div
+            class="nav-icon w-6 h-6 mr-3 px-0.5! flex items-center justify-center"
+          >
+            <img
+              src="assets/icons/solar--exit-bold-blue.svg"
+              alt=""
+              width="30"
+              height="30"
+            />
+          </div>
+          <span>Leave Management</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer p-6! border-t border-white/10 mt-auto">
+      <button
+        (click)="logoutFn(); closeMobileMenu()"
+        class="logout-btn w-full flex items-center py-3 px-6 bg-transparent border-none text-[#001e46] font-bold cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:text-red-500 hover:bg-white/5"
+      >
+        <div class="nav-icon w-6 h-6 mr-3 flex items-center justify-center">
+          <img src="assets/icons/exit-blue.svg" alt="" width="30" height="30" />
+        </div>
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Layout - FIXED VERSION -->
+<div class="min-h-screen bg-[#f8fafc] font-sans text-text-dark">
+  <!-- Desktop Sidebar and Content -->
+  <div class="dashboard hidden md:grid grid-cols-[280px_1fr] min-h-screen">
+    <!-- Desktop Sidebar -->
+    <div class="sidebar bg-sidebar-bg text-text-light relative z-10">
+      <!-- Your existing desktop sidebar content -->
+      <div class="brand flex items-center py-3! px-6!">
+        <div
+          class="logo w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg mr-3"
+        ></div>
+        <h1 class="text-xl font-semibold m-0">Spectre</h1>
       </div>
+      <div class="nav-menu">
+        <ul class="py-4">
+          <li class="active">
+            <a
+              routerLink="/dashboard"
+              class="flex items-center py-3 px-6 text-[#001e46]! font-bold no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#cfe2ff] hover:rounded-md!"
+            >
+              <div
+                class="nav-icon w-6 h-6 mr-3 px-0.5! flex items-center justify-center"
+              >
+                <img
+                  src="assets/icons/home-rounded.svg"
+                  alt=""
+                  width="30"
+                  height="30"
+                />
+              </div>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/employee"
+              class="flex items-center py-3 px-6 text-[#001e46]! font-bold no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#cfe2ff] hover:rounded-md!"
+            >
+              <div
+                class="nav-icon w-6 h-6 mr-3 px-0.5! flex items-center justify-center"
+              >
+                <img
+                  src="assets/icons/raphael--users-blue.svg"
+                  alt=""
+                  width="30"
+                  height="30"
+                />
+              </div>
+              <span>Employees</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/leave"
+              class="flex items-center py-3 px-6 text-[#001e46]! font-bold no-relative transition-all duration-300 text-decoration-none ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#cfe2ff] hover:rounded-md!"
+            >
+              <div
+                class="nav-icon w-6 h-6 mr-3 px-0.5! flex items-center justify-center"
+              >
+                <img
+                  src="assets/icons/solar--exit-bold-blue.svg"
+                  alt=""
+                  width="30"
+                  height="30"
+                />
+              </div>
+              <span>Leave Management</span>
+            </a>
+          </li>
+        </ul>
+        <div
+          class="sidebar-footer absolute bottom-0 left-0 right-0 p-6! border-t border-white/10"
+        >
+          <button
+            (click)="logoutFn()"
+            class="logout-btn w-full flex items-center py-3 px-6 bg-transparent border-none text-[#001e46] font-bold cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:text-red-500 hover:bg-white/5"
+          >
+            <div class="nav-icon w-6 h-6 mr-3 flex items-center justify-center">
+              <img
+                src="assets/icons/exit-blue.svg"
+                alt=""
+                width="30"
+                height="30"
+              />
+            </div>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Main Content -->
+    <div class="main-content flex flex-col min-h-screen">
+      <router-outlet></router-outlet>
     </div>
   </div>
 
-  <!-- Main Content -->
-  <div class="main-content flex flex-col min-h-screen">
+  <!-- Mobile Main Content - This ensures content is always visible on mobile -->
+  <div class="md:hidden min-h-screen">
     <router-outlet></router-outlet>
   </div>
 </div>
+
 <app-toast></app-toast>

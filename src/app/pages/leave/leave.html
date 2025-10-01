@@ -12,15 +12,17 @@
 </div>
 }
 
-<div class="p-6 bg-gray-50 relative">
+<div class="p-4 md:p-6 bg-gray-50 relative">
   <!-- Page Header -->
-  <div class="flex justify-between items-center mb-6">
+  <div
+    class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6"
+  >
     <h2 class="text-xl font-semibold text-blue-800">Leave Management</h2>
     <button
-      class="py-2! px-4! bg-blue-600 text-white rounded-lg! hover:bg-blue-700 transition-colors flex items-center"
+      class="py-2! px-4! mb-10! bg-blue-600 text-white rounded-lg! hover:bg-blue-700 transition-colors flex items-center justify-center w-full sm:w-auto"
       (click)="openModal()"
     >
-      <i class="fas fa-plus mr-2"></i> Add Leave
+      Add Leave
     </button>
   </div>
 
@@ -51,72 +53,72 @@
 
   <div id="leaveTabContent">
     @if (currentTab=='allLeaves') {
-    <div
-      id="allLeaveRequests"
-      class="p-4 bg-white rounded-lg shadow-md border-t-4 border-blue-600"
-    >
-      <div>
-        <h6 class="font-semibold text-blue-800">All Leave Requests</h6>
-      </div>
-      <table class="w-full border-collapse">
-        <thead>
-          <tr class="bg-gray-50">
-            <th class="text-left p-3 font-semibold text-blue-800 border-b">
-              Leave ID
-            </th>
-            <th class="text-left p-3 font-semibold text-blue-800 border-b">
-              Employee
-            </th>
-            <th class="text-left p-3 font-semibold text-blue-800 border-b">
-              Leave Type
-            </th>
-            <th class="text-left p-3 font-semibold text-blue-800 border-b">
-              From Date
-            </th>
-            <th class="text-left p-3 font-semibold text-blue-800 border-b">
-              To Date
-            </th>
-            <th class="text-left p-3 font-semibold text-blue-800 border-b">
-              Days
-            </th>
-            <th class="text-left p-3 font-semibold text-blue-800 border-b">
-              Status
-            </th>
-            <!-- <th class="text-left p-3 font-semibold text-blue-800 border-b">
+    <div class="overflow-x-auto">
+      <div
+        class="bg-white rounded-lg shadow-md border-t-4 border-blue-600 min-w-[600px]"
+      >
+        <div>
+          <h6 class="font-semibold text-blue-800">All Leave Requests</h6>
+        </div>
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-50">
+              <th class="text-left p-3 font-semibold text-blue-800 border-b">
+                Leave ID
+              </th>
+              <th class="text-left p-3 font-semibold text-blue-800 border-b">
+                Employee
+              </th>
+              <th class="text-left p-3 font-semibold text-blue-800 border-b">
+                Leave Type
+              </th>
+              <th class="text-left p-3 font-semibold text-blue-800 border-b">
+                From Date
+              </th>
+              <th class="text-left p-3 font-semibold text-blue-800 border-b">
+                To Date
+              </th>
+              <th class="text-left p-3 font-semibold text-blue-800 border-b">
+                Days
+              </th>
+              <th class="text-left p-3 font-semibold text-blue-800 border-b">
+                Status
+              </th>
+              <!-- <th class="text-left p-3 font-semibold text-blue-800 border-b">
               Actions
             </th> -->
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of paginatedLeaves; track $index) {
-          <tr class="hover:bg-gray-50">
-            <td class="p-3 border-b">
-              {{ $index + 1 + (startPage - 1) * pageBreak }}
-            </td>
-            <td class="p-3 border-b">{{ item.employeeName }}</td>
-            <td class="p-3 border-b">{{ item.leaveType }}</td>
-            <td class="p-3 border-b">
-              {{ item.fromDate | date : "dd-MM-yy" }}
-            </td>
-            <td class="p-3 border-b">
-              {{ item.toDate | date : "dd-MM-yyyy" }}
-            </td>
-            <td class="p-3 border-b">{{ item.noOfDays }}</td>
-            <td class="p-3 border-b">
-              @if(item.isApproved==null){
-              <span
-                class="px-2! py-1! bg-yellow-100 text-yellow-800 rounded-full text-xs"
-                >Pending</span
-              >}@else if(item.isApproved==true) {
-              <span
-                class="px-2! py-1! bg-yellow-100 text-yellow-800 rounded-full text-xs"
-                >Approved</span
-              >}@else if (item.isApproved==false) {<span
-                class="px-2! py-1! bg-yellow-100 text-yellow-800 rounded-full text-xs"
-                >Rejected</span
-              >}
-            </td>
-            <!-- <td class="p-3 border-b flex gap-2">
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of paginatedLeaves; track $index) {
+            <tr class="hover:bg-gray-50">
+              <td class="p-3 border-b">
+                {{ $index + 1 + (startPage - 1) * pageBreak }}
+              </td>
+              <td class="p-3 border-b">{{ item.employeeName }}</td>
+              <td class="p-3 border-b">{{ item.leaveType }}</td>
+              <td class="p-3 border-b">
+                {{ item.fromDate | date : "dd-MM-yy" }}
+              </td>
+              <td class="p-3 border-b">
+                {{ item.toDate | date : "dd-MM-yyyy" }}
+              </td>
+              <td class="p-3 border-b">{{ item.noOfDays }}</td>
+              <td class="p-3 border-b">
+                @if(item.isApproved==null){
+                <span
+                  class="px-2! py-1! bg-yellow-100 text-yellow-800 rounded-full text-xs"
+                  >Pending</span
+                >}@else if(item.isApproved==true) {
+                <span
+                  class="px-2! py-1! bg-yellow-100 text-yellow-800 rounded-full text-xs"
+                  >Approved</span
+                >}@else if (item.isApproved==false) {<span
+                  class="px-2! py-1! bg-yellow-100 text-yellow-800 rounded-full text-xs"
+                  >Rejected</span
+                >}
+              </td>
+              <!-- <td class="p-3 border-b flex gap-2">
               <button
                 class="px-2! py-1! bg-green-100 text-green-800 rounded-md! hover:bg-green-200 transition-colors"
                 (click)="approveLeave(item.leaveId)"
@@ -130,110 +132,111 @@
                 Reject
               </button>
             </td> -->
-          </tr>
+            </tr>
+            }
+          </tbody>
+        </table>
+        <div class="flex gap-2 justify-center mt-4 items-center">
+          <!-- Jump to First -->
+          <button
+            (click)="changePage(1)"
+            class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+            [disabled]="startPage === 1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 19l-7-7 7-7m8 14V5"
+              />
+            </svg>
+          </button>
+
+          <!-- Previous -->
+          <button
+            (click)="changePage(startPage - 1)"
+            class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+            [disabled]="startPage === 1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+
+          <!-- Page Numbers -->
+          @for (page of visiblePages; track page) {
+          <button
+            (click)="changePage(page)"
+            [class.bg-blue-600]="startPage === page"
+            [class.text-white]="startPage === page"
+            class="px-3 py-1 border rounded-md! hover:bg-blue-500 hover:text-white"
+          >
+            {{ page }}
+          </button>
           }
-        </tbody>
-      </table>
-      <div class="flex gap-2 justify-center mt-4 items-center">
-        <!-- Jump to First -->
-        <button
-          (click)="changePage(1)"
-          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
-          [disabled]="startPage === 1"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-4 h-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M11 19l-7-7 7-7m8 14V5"
-            />
-          </svg>
-        </button>
 
-        <!-- Previous -->
-        <button
-          (click)="changePage(startPage - 1)"
-          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
-          [disabled]="startPage === 1"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-4 h-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+          <!-- Next -->
+          <button
+            (click)="changePage(startPage + 1)"
+            class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+            [disabled]="startPage === totalPages"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
 
-        <!-- Page Numbers -->
-        @for (page of visiblePages; track page) {
-        <button
-          (click)="changePage(page)"
-          [class.bg-blue-600]="startPage === page"
-          [class.text-white]="startPage === page"
-          class="px-3 py-1 border rounded-md! hover:bg-blue-500 hover:text-white"
-        >
-          {{ page }}
-        </button>
-        }
-
-        <!-- Next -->
-        <button
-          (click)="changePage(startPage + 1)"
-          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
-          [disabled]="startPage === totalPages"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-4 h-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+          <!-- Jump to Last -->
+          <button
+            (click)="changePage(totalPages)"
+            class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+            [disabled]="startPage === totalPages"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </button>
-
-        <!-- Jump to Last -->
-        <button
-          (click)="changePage(totalPages)"
-          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
-          [disabled]="startPage === totalPages"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-4 h-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 5l7 7-7 7M5 5v14"
-            />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 5l7 7-7 7M5 5v14"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
     }@else{

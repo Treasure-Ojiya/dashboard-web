@@ -67,6 +67,26 @@ export class Layout implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  toggleMobileMenu() {
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    const mobileOverlay = document.getElementById('mobileMenuOverlay');
+
+    if (mobileSidebar && mobileOverlay) {
+      mobileSidebar.classList.toggle('-translate-x-full');
+      mobileOverlay.classList.toggle('hidden');
+    }
+  }
+
+  closeMobileMenu() {
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    const mobileOverlay = document.getElementById('mobileMenuOverlay');
+
+    if (mobileSidebar && mobileOverlay) {
+      mobileSidebar.classList.add('-translate-x-full');
+      mobileOverlay.classList.add('hidden');
+    }
+  }
+
   logoutFn() {
     localStorage.removeItem('leaveUser');
     this.router.navigateByUrl('/login');

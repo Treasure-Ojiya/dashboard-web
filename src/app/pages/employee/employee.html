@@ -1,219 +1,208 @@
-<!-- @if (loader) {
-<div
-  class="fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
->
-  <app-spinner [loader]="loader" />
-</div>
-} -->
-<div class="p-6 bg-gray-50 relative">
+<div class="p-4 md:p-6 bg-gray-50 relative">
   <!-- Page Header -->
-  <div class="flex justify-between items-center mb-6">
+  <div
+    class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6"
+  >
     <h2 class="text-xl font-semibold text-blue-800">Employee Management</h2>
     <button
-      class="py-2! px-4! bg-blue-600 text-white rounded-lg! hover:bg-blue-700 transition-colors flex items-center"
+      class="py-2! px-4! mb-10! bg-blue-600 text-white rounded-lg! hover:bg-blue-700 transition-colors flex items-center justify-center w-full sm:w-auto"
       id="addEmployeeBtn"
       (click)="openModal()"
     >
-      <i class="fas fa-user-plus mr-2"></i> Add Employee
+      Add Employee
     </button>
   </div>
 
   <!-- Employee Table -->
   <div
-    class="px-4 py-2 bg-white rounded-lg shadow-md border-t-4 border-blue-600"
+    class="bg-white rounded-lg shadow-md border-t-4 border-blue-600 overflow-x-auto"
   >
-    <div class="flex justify-between">
-      <!-- <div class="relative w-72">
-        <i
-          class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600"
-        ></i>
-        <input
-          type="text"
-          placeholder="Search employees..."
-          class="w-full pl-10 pr-4 py-2 border border-blue-600 rounded-lg focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-        />
-      </div> -->
-      <div class="flex gap-1">
-        <button
-          class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-cyan-500"
-        >
-          <i class="fas fa-filter"></i>
-        </button>
-        <button
-          class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-blue-600"
-        >
-          <i class="fas fa-download"></i>
-        </button>
+    <div class="p-4">
+      <div class="flex flex-col sm:flex-row sm:justify-between gap-4">
+        <div class="flex gap-1 justify-end sm:justify-start">
+          <button
+            class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-cyan-500"
+          >
+            <i class="fas fa-filter"></i>
+          </button>
+          <button
+            class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-blue-600"
+          >
+            <i class="fas fa-download"></i>
+          </button>
+        </div>
       </div>
-    </div>
 
-    <table class="w-full border-collapse">
-      <thead>
-        <tr>
-          <th
-            class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse min-w-[600px]">
+          <thead>
+            <tr>
+              <th
+                class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
+              >
+                ID
+              </th>
+              <th
+                class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
+              >
+                Name
+              </th>
+              <th
+                class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
+              >
+                Email
+              </th>
+              <th
+                class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
+              >
+                Contact
+              </th>
+              <th
+                class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
+              >
+                Department
+              </th>
+              <th
+                class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-red">
+            @for (item of paginatedEmployees; track $index) {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="p-2 border-b border-blue-100">
+                {{ $index + 1 + (startPage - 1) * pageBreak }}
+              </td>
+              <td class="p-2 border-b border-blue-100">
+                {{ item.employeeName }}
+              </td>
+              <td class="p-2 border-b border-blue-100">{{ item.emailId }}</td>
+              <td class="p-2 border-b border-blue-100">{{ item.contactNo }}</td>
+              <td class="p-2 border-b border-blue-100">{{ item.deptName }}</td>
+              <td class="flex gap-2 border-b border-blue-100">
+                <button
+                  class="px-2! py-1! bg-blue-100 text-blue-800 rounded-md! hover:bg-blue-200 transition-colors"
+                  (click)="openEditModal(item)"
+                >
+                  Edit
+                </button>
+                <button
+                  class="px-2! py-1! bg-red-100 text-red-800 rounded-md! hover:text-white hover:bg-red-800 transition-colors"
+                  (click)="deleteEmployee(item.employeeId)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+            }
+            <tr class="hover:bg-amber-100 transition-colors"></tr>
+          </tbody>
+        </table>
+        <div class="flex gap-2 justify-center mt-4 items-center flex-wrap">
+          <!-- Jump to First -->
+          <button
+            (click)="changePage(1)"
+            class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+            [disabled]="startPage === 1"
           >
-            ID
-          </th>
-          <th
-            class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
-          >
-            Name
-          </th>
-          <th
-            class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
-          >
-            Email
-          </th>
-          <th
-            class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
-          >
-            Contact
-          </th>
-          <th
-            class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
-          >
-            Department
-          </th>
-          <th
-            class="text-left p-2 font-semibold text-blue-800 border-b-2 border-blue-600"
-          >
-            Actions
-          </th>
-        </tr>
-      </thead>
-      <tbody class="bg-red">
-        @for (item of paginatedEmployees; track $index) {
-        <tr class="hover:bg-gray-50 transition-colors">
-          <td class="p-2 border-b border-blue-100">
-            {{ $index + 1 + (startPage - 1) * pageBreak }}
-          </td>
-          <td class="p-2 border-b border-blue-100">{{ item.employeeName }}</td>
-          <td class="p-2 border-b border-blue-100">{{ item.emailId }}</td>
-          <td class="p-2 border-b border-blue-100">{{ item.contactNo }}</td>
-          <td class="p-2 border-b border-blue-100">{{ item.deptName }}</td>
-          <td class="flex gap-2 border-b border-blue-100">
-            <button
-              class="px-2! py-1! bg-blue-100 text-blue-800 rounded-md! hover:bg-blue-200 transition-colors"
-              (click)="openEditModal(item)"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              Edit
-            </button>
-            <button
-              class="px-2! py-1! bg-red-100 text-red-800 rounded-md! hover:text-white hover:bg-red-800 transition-colors"
-              (click)="deleteEmployee(item.employeeId)"
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 19l-7-7 7-7m8 14V5"
+              />
+            </svg>
+          </button>
+
+          <!-- Previous -->
+          <button
+            (click)="changePage(startPage - 1)"
+            class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+            [disabled]="startPage === 1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              Delete
-            </button>
-          </td>
-        </tr>
-        }
-        <tr class="hover:bg-amber-100 transition-colors"></tr>
-      </tbody>
-    </table>
-    <div class="flex gap-2 justify-center mt-4 items-center">
-      <!-- Jump to First -->
-      <button
-        (click)="changePage(1)"
-        class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
-        [disabled]="startPage === 1"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M11 19l-7-7 7-7m8 14V5"
-          />
-        </svg>
-      </button>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
 
-      <!-- Previous -->
-      <button
-        (click)="changePage(startPage - 1)"
-        class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
-        [disabled]="startPage === 1"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-      </button>
+          <!-- Page Numbers -->
+          @for (page of visiblePages; track page) {
+          <button
+            (click)="changePage(page)"
+            [class.bg-blue-600]="startPage === page"
+            [class.text-white]="startPage === page"
+            class="px-3 py-1 border rounded-md! hover:bg-blue-500 hover:text-white"
+          >
+            {{ page }}
+          </button>
+          }
 
-      <!-- Page Numbers -->
-      @for (page of visiblePages; track page) {
-      <button
-        (click)="changePage(page)"
-        [class.bg-blue-600]="startPage === page"
-        [class.text-white]="startPage === page"
-        class="px-3 py-1 border rounded-md! hover:bg-blue-500 hover:text-white"
-      >
-        {{ page }}
-      </button>
-      }
+          <!-- Next -->
+          <button
+            (click)="changePage(startPage + 1)"
+            class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+            [disabled]="startPage === totalPages"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
 
-      <!-- Next -->
-      <button
-        (click)="changePage(startPage + 1)"
-        class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
-        [disabled]="startPage === totalPages"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5l7 7-7 7"
-          />
-        </svg>
-      </button>
+          <!-- Jump to Last -->
+          <button
+            (click)="changePage(totalPages)"
+            class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
+            [disabled]="startPage === totalPages"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 5l7 7-7 7M5 5v14"
+              />
+            </svg>
+          </button>
+        </div>
 
-      <!-- Jump to Last -->
-      <button
-        (click)="changePage(totalPages)"
-        class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200"
-        [disabled]="startPage === totalPages"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M13 5l7 7-7 7M5 5v14"
-          />
-        </svg>
-      </button>
-    </div>
-
-    <!-- <div
+        <!-- <div
       class="flex justify-between items-center mt-4 pt-4 border-t border-blue-100"
     >
       <div class="text-sm text-blue-600">Showing 1 to 5 of 24 entries</div>
@@ -245,129 +234,129 @@
         </button>
       </div>
     </div> -->
-  </div>
-
-  <!-- Add Employee Modal -->
-  <div
-    class="absolute inset-0 rounded-md! hidden z-50 items-center justify-center transition-opacity duration-600 ease-in-out p-4!"
-    id="addEmployeeModal"
-    #newModal
-    tabindex="-1"
-  >
-    <div
-      class="bg-white rounded-lg! w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-xl transition-all duration-600 ease-in-out"
-    >
-      <div
-        class="flex justify-between items-center p-3! bg-blue-600 text-white rounded-t-lg!"
-      >
-        <h3 class="text-lg font-semibold">Add New Employee</h3>
-        <button
-          class="text-4xl! hover:text-red-800! close-modal"
-          (click)="closeModal()"
-        >
-          &times;
-        </button>
       </div>
-      <div class="px-6! py-4!">
-        <form id="employeeForm">
-          <div class="grid grid-cols-2 gap-4 mb-4">
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >First Name</label
-              >
-              <input
-                type="text"
-                required
-                [(ngModel)]="employeeObj.employeeName"
-                name="employeeName"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400"
-              />
-            </div>
 
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Email</label
-              >
-              <input
-                type="email"
-                required
-                [(ngModel)]="employeeObj.emailId"
-                name="emailId"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              />
-            </div>
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Phone</label
-              >
-              <input
-                type="tel"
-                required
-                [(ngModel)]="employeeObj.contactNo"
-                name="contactNo"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              />
-            </div>
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Password</label
-              >
-              <input
-                type="password"
-                required
-                [(ngModel)]="employeeObj.password"
-                name="password"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              />
-            </div>
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Position</label
-              >
-              <select
-                required
-                [(ngModel)]="employeeObj.role"
-                name="role"
-                class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              >
-                <option value="">Select Role</option>
-                @for (item of roleList$ | async; track $index) {
-                <option>{{ item }}</option>
-                }
-              </select>
-            </div>
+      <!-- Add Employee Modal -->
+      <div
+        class="absolute inset-0 rounded-md! hidden z-50 items-center justify-center transition-opacity duration-600 ease-in-out p-4!"
+        id="addEmployeeModal"
+        #newModal
+        tabindex="-1"
+      >
+        <div
+          class="bg-white rounded-lg! w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-xl transition-all duration-600 ease-in-out mx-2"
+        >
+          <div
+            class="flex justify-between items-center p-3! bg-blue-600 text-white rounded-t-lg!"
+          >
+            <h3 class="text-lg font-semibold">Add New Employee</h3>
+            <button
+              class="text-4xl! hover:text-red-800! close-modal"
+              (click)="closeModal()"
+            >
+              &times;
+            </button>
+          </div>
+          <div class="px-6! py-4!">
+            <form id="employeeForm">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >First Name</label
+                  >
+                  <input
+                    type="text"
+                    required
+                    [(ngModel)]="employeeObj.employeeName"
+                    name="employeeName"
+                    class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400"
+                  />
+                </div>
 
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Department</label
-              >
-              <select
-                required
-                [(ngModel)]="employeeObj.deptId"
-                name="deptId"
-                class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              >
-                <option value="">Select Department</option>
-                @for (item of deptList$ | async; track $index) {
-                <option [value]="item.deptId">{{ item.deptName }}</option>
-                }
-              </select>
-            </div>
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Gender</label
-              >
-              <select
-                [(ngModel)]="employeeObj.gender"
-                name="gender"
-                class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              >
-                <option>Select Gender</option>
-                <option>Male</option>
-                <option>Female</option>
-              </select>
-            </div>
-            <!-- <div class="mb-2">
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    required
+                    [(ngModel)]="employeeObj.emailId"
+                    name="emailId"
+                    class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  />
+                </div>
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Phone</label
+                  >
+                  <input
+                    type="tel"
+                    required
+                    [(ngModel)]="employeeObj.contactNo"
+                    name="contactNo"
+                    class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  />
+                </div>
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Password</label
+                  >
+                  <input
+                    type="password"
+                    required
+                    [(ngModel)]="employeeObj.password"
+                    name="password"
+                    class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  />
+                </div>
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Position</label
+                  >
+                  <select
+                    required
+                    [(ngModel)]="employeeObj.role"
+                    name="role"
+                    class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  >
+                    <option value="">Select Role</option>
+                    @for (item of roleList$ | async; track $index) {
+                    <option>{{ item }}</option>
+                    }
+                  </select>
+                </div>
+
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Department</label
+                  >
+                  <select
+                    required
+                    [(ngModel)]="employeeObj.deptId"
+                    name="deptId"
+                    class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  >
+                    <option value="">Select Department</option>
+                    @for (item of deptList$ | async; track $index) {
+                    <option [value]="item.deptId">{{ item.deptName }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Gender</label
+                  >
+                  <select
+                    [(ngModel)]="employeeObj.gender"
+                    name="gender"
+                    class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  >
+                    <option>Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                  </select>
+                </div>
+                <!-- <div class="mb-2">
               <label class="block text-sm font-medium text-blue-800 mb-1"
                 >Start Date</label
               >
@@ -389,180 +378,182 @@
                 <option>Inactive</option>
               </select>
             </div> -->
-          </div>
+              </div>
 
-          <div class="flex justify-end gap-4 pt-4 border-t border-blue-100">
-            <button
-              type="submit"
-              class="px-4! py-1! bg-red-300 text-red-800 rounded-md! hover:bg-red-800 hover:text-white transition-colors"
-              (click)="closeModal()"
-            >
-              Cancel
-            </button>
+              <div class="flex justify-end gap-4 pt-4 border-t border-blue-100">
+                <button
+                  type="submit"
+                  class="px-4! py-1! bg-red-300 text-red-800 rounded-md! hover:bg-red-800 hover:text-white transition-colors"
+                  (click)="closeModal()"
+                >
+                  Cancel
+                </button>
 
-            <button
-              type="submit"
-              class="px-4! py-1! bg-blue-600 text-white rounded-md! hover:bg-blue-700 transition-colors"
-              (click)="addEmployee()"
-            >
-              Add Employee
-            </button>
+                <button
+                  type="submit"
+                  class="px-4! py-1! bg-blue-600 text-white rounded-md! hover:bg-blue-700 transition-colors"
+                  (click)="addEmployee()"
+                >
+                  Add Employee
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div
-    class="fixed inset-0 rounded-md! hidden z-50 items-center justify-center transition-opacity duration-600 ease-in-out p-4!"
-    id="editEmployeeModal"
-    #editModal
-    tabindex="-1"
-  >
-    <div
-      class="bg-white rounded-lg! w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-xl transition-all duration-600 ease-in-out"
-    >
       <div
-        class="flex justify-between items-center p-3! bg-blue-600 text-white rounded-t-lg!"
+        class="fixed inset-0 rounded-md! hidden z-50 items-center justify-center transition-opacity duration-600 ease-in-out p-4!"
+        id="editEmployeeModal"
+        #editModal
+        tabindex="-1"
       >
-        <h3 class="text-lg font-semibold">Update Employee</h3>
-        <button
-          class="text-4xl! hover:text-red-800! close-modal"
-          (click)="closeModal('edit')"
+        <div
+          class="bg-white rounded-lg! w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-xl transition-all duration-600 ease-in-out"
         >
-          &times;
-        </button>
-      </div>
-      <div class="px-6! py-4!">
-        <form id="employeeForm">
-          <div class="grid grid-cols-2 gap-6 mb-6">
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >First Name</label
-              >
-              <input
-                type="text"
-                required
-                [(ngModel)]="employeeObj.employeeName"
-                name="employeeName"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              />
-            </div>
-
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Email</label
-              >
-              <input
-                type="email"
-                required
-                [(ngModel)]="employeeObj.emailId"
-                name="emailId"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              />
-            </div>
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Phone</label
-              >
-              <input
-                type="tel"
-                required
-                [(ngModel)]="employeeObj.contactNo"
-                name="contactNo"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              />
-            </div>
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Password</label
-              >
-              <input
-                type="password"
-                required
-                [(ngModel)]="employeeObj.password"
-                name="password"
-                class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              />
-            </div>
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Position</label
-              >
-              <select
-                required
-                [(ngModel)]="employeeObj.role"
-                name="role"
-                class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              >
-                <option value="">Select Role</option>
-                @for (item of roleList$ | async; track $index) {
-                <option>{{ item }}</option>
-                }
-              </select>
-            </div>
-
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Department</label
-              >
-              <select
-                required
-                [(ngModel)]="employeeObj.deptId"
-                name="deptId"
-                class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              >
-                <option value="">Select Department</option>
-                @for (item of deptList$ | async; track $index) {
-                <option [value]="item.deptId">{{ item.deptName }}</option>
-                }
-              </select>
-            </div>
-            <div class="mb-2">
-              <label class="block text-sm font-medium text-blue-800 mb-1"
-                >Gender</label
-              >
-              <select
-                [(ngModel)]="employeeObj.gender"
-                name="gender"
-                class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
-              >
-                <option>Select Gender</option>
-                <option>Male</option>
-                <option>Female</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="flex justify-end gap-4 pt-4 border-t border-blue-100">
+          <div
+            class="flex justify-between items-center p-3! bg-blue-600 text-white rounded-t-lg!"
+          >
+            <h3 class="text-lg font-semibold">Update Employee</h3>
             <button
-              type="submit"
-              class="px-4! py-1! bg-red-300 text-red-800 rounded-md! hover:bg-red-800 hover:text-white transition-colors"
+              class="text-4xl! hover:text-red-800! close-modal"
               (click)="closeModal('edit')"
             >
-              Cancel
-            </button>
-
-            <button
-              type="submit"
-              class="px-4! py-1! bg-blue-600 text-white rounded-md! hover:bg-blue-700 transition-colors"
-              (click)="updateEmployee()"
-            >
-              Update
+              &times;
             </button>
           </div>
-        </form>
+          <div class="px-6! py-4!">
+            <form id="employeeForm">
+              <div class="grid grid-cols-2 gap-6 mb-6">
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >First Name</label
+                  >
+                  <input
+                    type="text"
+                    required
+                    [(ngModel)]="employeeObj.employeeName"
+                    name="employeeName"
+                    class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  />
+                </div>
+
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    required
+                    [(ngModel)]="employeeObj.emailId"
+                    name="emailId"
+                    class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  />
+                </div>
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Phone</label
+                  >
+                  <input
+                    type="tel"
+                    required
+                    [(ngModel)]="employeeObj.contactNo"
+                    name="contactNo"
+                    class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  />
+                </div>
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Password</label
+                  >
+                  <input
+                    type="password"
+                    required
+                    [(ngModel)]="employeeObj.password"
+                    name="password"
+                    class="w-full px-3 py-2 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  />
+                </div>
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Position</label
+                  >
+                  <select
+                    required
+                    [(ngModel)]="employeeObj.role"
+                    name="role"
+                    class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  >
+                    <option value="">Select Role</option>
+                    @for (item of roleList$ | async; track $index) {
+                    <option>{{ item }}</option>
+                    }
+                  </select>
+                </div>
+
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Department</label
+                  >
+                  <select
+                    required
+                    [(ngModel)]="employeeObj.deptId"
+                    name="deptId"
+                    class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  >
+                    <option value="">Select Department</option>
+                    @for (item of deptList$ | async; track $index) {
+                    <option [value]="item.deptId">{{ item.deptName }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <label class="block text-sm font-medium text-blue-800 mb-1"
+                    >Gender</label
+                  >
+                  <select
+                    [(ngModel)]="employeeObj.gender"
+                    name="gender"
+                    class="w-full px-3 py-3 border border-blue-600 rounded-md focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 transition-all"
+                  >
+                    <option>Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-4 pt-4 border-t border-blue-100">
+                <button
+                  type="submit"
+                  class="px-4! py-1! bg-red-300 text-red-800 rounded-md! hover:bg-red-800 hover:text-white transition-colors"
+                  (click)="closeModal('edit')"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  class="px-4! py-1! bg-blue-600 text-white rounded-md! hover:bg-blue-700 transition-colors"
+                  (click)="updateEmployee()"
+                >
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        @if (addSuccess) {
+        <div class="text-green-500 font-semibold mb-2">
+          {{ addSuccess }}
+        </div>
+        } @if (addError) {
+        <div class="text-red-500 font-semibold mb-2">
+          {{ addError }}
+        </div>
+        }
       </div>
     </div>
-
-    @if (addSuccess) {
-    <div class="text-green-500 font-semibold mb-2">
-      {{ addSuccess }}
-    </div>
-    } @if (addError) {
-    <div class="text-red-500 font-semibold mb-2">
-      {{ addError }}
-    </div>
-    }
   </div>
 </div>

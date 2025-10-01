@@ -22,7 +22,7 @@ import { ToastService } from '../../services/toast-message/toast-component';
 @Component({
   selector: 'app-employee',
   standalone: true,
-  imports: [CommonModule, AsyncPipe, FormsModule, Spinner],
+  imports: [CommonModule, AsyncPipe, FormsModule],
   templateUrl: './employee.html',
   styleUrl: './employee.css',
   encapsulation: ViewEncapsulation.None,
